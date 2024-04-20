@@ -2,7 +2,6 @@
 
 Mat ImageHelper::readImage(const char* imagePath)
 {
-    // add code read image (gray scale)
     Mat image = imread(imagePath);
 
     // if image invalid show error and exit
@@ -36,8 +35,23 @@ void ImageHelper::showPointsInImage(const Mat& source, const vector<mKeyPoint>& 
     // save the original image
     source.copyTo(output);
 
+    int radius = 1;
+    int thickness = 2;
+    Scalar color = Scalar(0, 0, 255); // RED circle
+
+    for (mKeyPoint k : keyPoints) {
+        Point keyPoint = Point(k.col(), k.row()); // convert mKeyPoint to Point (openCV)
+        circle(output, keyPoint, radius, color, thickness);
+    }
+}
+
+void ImageHelper::showCirclesInImage(const Mat& source, const vector<mKeyPoint>& keyPoints, Mat& output)
+{
+    // save the original image
+    source.copyTo(output);
+
     int radius = 30;
-    int thickness = 5;
+    int thickness = 3;
     Scalar color = Scalar(0,0,255); // RED circle
 
     for (mKeyPoint k : keyPoints) {

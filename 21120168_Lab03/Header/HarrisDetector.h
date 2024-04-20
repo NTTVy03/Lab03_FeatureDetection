@@ -1,5 +1,7 @@
 #pragma once
 
+#define DEFAULT_THRESHOLD 0.2
+
 #include "KeyPoint.h"
 #include "ImageHelper.h"
 #include "KernelHelper.h"
