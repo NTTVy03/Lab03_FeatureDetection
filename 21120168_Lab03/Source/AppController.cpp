@@ -37,6 +37,8 @@ void AppController::run(int argc, char** argv)
 	else {
 		showHelp();
 	}
+
+	waitKey();
 }
 
 void AppController::showHelp()

@@ -3,7 +3,7 @@
 Mat ImageHelper::readImage(const char* imagePath)
 {
     // add code read image (gray scale)
-    Mat image = imread(imagePath, IMREAD_GRAYSCALE);
+    Mat image = imread(imagePath);
 
     // if image invalid show error and exit
     if (image.empty()) {
@@ -12,6 +12,14 @@ Mat ImageHelper::readImage(const char* imagePath)
     }
 
     return image;
+}
+
+void ImageHelper::preprocess(const Mat& source, Mat& destination)
+{
+    // color --> gray scale
+    cvtColor(source, destination, COLOR_BGR2GRAY);
+    // CV_8U --> CV_64F
+    destination.convertTo(destination, CV_64F);
 }
 
 Mat ImageHelper::GaussianBlur(const Mat& source)
@@ -29,19 +37,23 @@ void ImageHelper::showPointsInImage(const Mat& source, const vector<mKeyPoint>& 
     source.copyTo(output);
 
     int radius = 30;
-    Scalar color = Scalar(255,0,0); // RED circle
+    int thickness = 5;
+    Scalar color = Scalar(0,0,255); // RED circle
 
     for (mKeyPoint k : keyPoints) {
         Point keyPoint = Point(k.col(), k.row()); // convert mKeyPoint to Point (openCV)
-        circle(output, keyPoint, radius, color);
+        circle(output, keyPoint, radius, color, thickness);
     }
 }
 
 void ImageHelper::showImage(const Mat& image, const char* windowName)
 {
+    Mat imageShow;
+    image.convertTo(imageShow, CV_8U);
+
     // custom window
     namedWindow(windowName, WINDOW_KEEPRATIO);
 
     // show image
-    imshow(windowName, image);
+    imshow(windowName, imageShow);
 }

@@ -3,12 +3,12 @@
 Mat KernelHelper::applyKernel(const Mat& source, const Mat& kernel)
 {
     Mat destination;
-    destination.create(source.size(), source.type());
+    destination.create(source.size(), CV_64F);
 
     int border = (kernel.rows - 1) / 2;
 
-    cv::Mat paddedsource;
-    cv::copyMakeBorder(source, paddedsource, border, border, border, border, cv::BORDER_REPLICATE);
+    Mat paddedsource;
+    copyMakeBorder(source, paddedsource, border, border, border, border, cv::BORDER_REPLICATE);
 
     for (int y = 0; y < source.rows; ++y) {
         for (int x = 0; x < source.cols; ++x) {
@@ -51,4 +51,19 @@ Mat KernelHelper::generateGaussianKernel(double sigma)
     kernel /= sum;
 
     return kernel;
+}
+
+void KernelHelper::printKernel(const Mat& kernel)
+{
+    int row = kernel.rows;
+    int col = kernel.cols;
+
+    cout << "Row = " << row << " - col = " << col << "\n";
+
+    for (int i = 0; i < row; i++) {
+        for (int j = 0; j < col; j++) {
+            cout << kernel.at<double>(i, j) << " ";
+        }
+        cout << "\n";
+    }
 }

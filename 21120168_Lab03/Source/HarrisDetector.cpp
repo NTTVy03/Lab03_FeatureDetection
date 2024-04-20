@@ -2,8 +2,10 @@
 
 void HarrisDetector::detect(Mat image, vector<mKeyPoint>& keyPoints, Mat& output)
 {
-	// 1. Grayscale &&  Gaussian Blur
-	Mat blurImage = ImageHelper::GaussianBlur(image);
+	// 1. Convert to CV_64F &&  Gaussian Blur
+	Mat image64;
+	ImageHelper::preprocess(image,image64);
+	Mat blurImage = ImageHelper::GaussianBlur(image64);
 
 	// 2. Gx, Gy, Gxx = Gx^2, Gyy = Gy^2, Gxy = Gx.Gy
 	Mat Gx, Gy, Gxx, Gyy, Gxy;
@@ -29,9 +31,9 @@ void HarrisDetector::detect(Mat image, vector<mKeyPoint>& keyPoints, Mat& output
 	Mat NMSMat = DetectorHelper::NMS(R);
 
 	// 6. threshold: threshold * maxR
-	float threshold = 0.8 * maxR;
+	float threshold = 0.7 * maxR;
 	DetectorHelper::thresholding(NMSMat, threshold, keyPoints);
-
+	
 	// 7. show keypoints on source image
 	ImageHelper::showPointsInImage(image, keyPoints, output);
 }
@@ -65,9 +67,10 @@ void HarrisDetector::calculateGradients(const Mat& source, Mat& Gx, Mat& Gy, Mat
 
 	for (int i = 0; i < row; i++) {
 		for (int j = 0; j < col; j++) {
+			// be careful with the bounding conditions T_T
 			double center = source.at<double>(i, j);
-			double right = (j < col ? source.at<double>(i, j+1): 0);
-			double bottom = (i < row ? source.at<double>(i+1, j): 0);
+			double right = (j+1 < col ? source.at<double>(i, j+1): center);
+			double bottom = (i+1 < row ? source.at<double>(i+1, j): center);
 
 			// Gx
 			Gx.at<double>(i, j) = right - center;

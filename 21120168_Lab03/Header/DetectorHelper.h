@@ -4,6 +4,7 @@
 #include "KeyPoint.h"
 
 #include <vector>
+#include <iostream>
 
 using namespace cv;
 using namespace std;
