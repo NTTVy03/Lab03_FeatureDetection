@@ -30,10 +30,7 @@ Mat KernelHelper::applyKernel(const Mat& source, const Mat& kernel)
 
 Mat KernelHelper::generateGaussianKernel(double sigma)
 {
-    int kernelSize = sigma * 6;
-    if (kernelSize % 2 == 0) { // size must be an odd
-        kernelSize--;
-    }
+    int kernelSize = calculateKernelSize(sigma);
 
     int halfKernelSize = kernelSize / 2;
     double sum = 0.0;
@@ -53,6 +50,28 @@ Mat KernelHelper::generateGaussianKernel(double sigma)
     return kernel;
 }
 
+Mat KernelHelper::generateLOGKernel(double sigma)
+{
+    cout << "LOG with sigma = " << sigma << "\n";
+    // window size
+    int kernelSize = calculateKernelSize(sigma);
+    int halfKernelSize = kernelSize / 2;
+
+    Mat logKernel = Mat::zeros(kernelSize, kernelSize, CV_64F);
+
+    for (int y = -halfKernelSize; y <= halfKernelSize; y++) {
+        for (int x = -halfKernelSize; x <= halfKernelSize; x++) {
+            double y_filter = exp(-(y * y) / (2.0 * sigma * sigma));
+            double x_filter = exp(-(x * x) / (2.0 * sigma * sigma));
+            double value = (-(2 * sigma * sigma) + (x * x + y * y)) * (x_filter * y_filter) * (1.0 / (2 * M_PI * sigma * sigma * sigma * sigma));
+            // double value = (-(2 * sigma * sigma) + (x * x + y * y)) * (x_filter * y_filter) * (1.0 / (2 * M_PI * sigma * sigma));
+            logKernel.at<double>(y + halfKernelSize, x + halfKernelSize) = value;
+        }
+    }
+
+    return logKernel;
+}
+
 void KernelHelper::printKernel(const Mat& kernel)
 {
     int row = kernel.rows;
@@ -66,4 +85,14 @@ void KernelHelper::printKernel(const Mat& kernel)
         }
         cout << "\n";
     }
+}
+
+int KernelHelper::calculateKernelSize(double sigma)
+{
+    int kernelSize = sigma * 6;
+    if (kernelSize % 2 == 0) { // size must be an odd
+        kernelSize--;
+    }
+
+    return kernelSize;
 }

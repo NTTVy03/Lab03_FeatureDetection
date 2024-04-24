@@ -35,16 +35,17 @@ void ImageHelper::showPointsInImage(const Mat& source, const vector<mKeyPoint>& 
     // save the original image
     source.copyTo(output);
 
-    int radius = 1;
     int thickness = 2;
     Scalar color = Scalar(0, 0, 255); // RED circle
 
     for (mKeyPoint k : keyPoints) {
+        int radius = (k.radius() == 0 ? 1 : k.radius());
         Point keyPoint = Point(k.col(), k.row()); // convert mKeyPoint to Point (openCV)
         circle(output, keyPoint, radius, color, thickness);
     }
 }
 
+/*
 void ImageHelper::showCirclesInImage(const Mat& source, const vector<mKeyPoint>& keyPoints, Mat& output)
 {
     // save the original image
@@ -59,6 +60,7 @@ void ImageHelper::showCirclesInImage(const Mat& source, const vector<mKeyPoint>&
         circle(output, keyPoint, radius, color, thickness);
     }
 }
+*/
 
 void ImageHelper::showImage(const Mat& image, const char* windowName)
 {

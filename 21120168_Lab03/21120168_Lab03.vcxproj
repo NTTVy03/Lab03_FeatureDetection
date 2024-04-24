@@ -152,6 +152,7 @@
   <ItemGroup>
     <ClInclude Include="Header\AppController.h" />
     <ClInclude Include="Header\BlobDetector.h" />
+    <ClInclude Include="Header\Constant.h" />
     <ClInclude Include="Header\DetectorHelper.h" />
     <ClInclude Include="Header\DoGDetector.h" />
     <ClInclude Include="Header\HarrisDetector.h" />

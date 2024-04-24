@@ -68,5 +68,8 @@
     <ClInclude Include="Header\DetectorHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Header\Constant.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

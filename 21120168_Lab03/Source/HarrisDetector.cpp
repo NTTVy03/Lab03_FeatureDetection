@@ -3,11 +3,13 @@
 void HarrisDetector::detect(Mat image, vector<mKeyPoint>& keyPoints, Mat& output)
 {
 	// 1. Convert to CV_64F &&  Gaussian Blur
+	cout << "Prepocess image...\n";
 	Mat image64;
 	ImageHelper::preprocess(image,image64);
 	Mat blurImage = ImageHelper::GaussianBlur(image64);
 
 	// 2. Gx, Gy, Gxx = Gx^2, Gyy = Gy^2, Gxy = Gx.Gy
+	cout << "Calculate and blur Gradients...\n";
 	Mat Gx, Gy, Gxx, Gyy, Gxy;
 	calculateGradients(blurImage, Gx, Gy, Gxx, Gyy, Gxy);
 
@@ -17,6 +19,7 @@ void HarrisDetector::detect(Mat image, vector<mKeyPoint>& keyPoints, Mat& output
 	Gxy = ImageHelper::GaussianBlur(Gxy);
 
 	// 4. calculate R
+	cout << "Calculate R...\n";
 	// 4.1. det(M) = Gx^2 * Gy^2 - Gxy
 	Mat det = calculateDet(Gxx, Gyy, Gxy);
 
@@ -28,13 +31,16 @@ void HarrisDetector::detect(Mat image, vector<mKeyPoint>& keyPoints, Mat& output
 	double maxR = DetectorHelper::getMaxInMat(R);
 
 	// 5. NMS
+	cout << "NMS...\n";
 	Mat NMSMat = DetectorHelper::NMS(R);
 
 	// 6. threshold: threshold * maxR
+	cout << "Threshold = 0.8...\n";
 	float threshold = DEFAULT_THRESHOLD * maxR;
 	DetectorHelper::thresholding(NMSMat, threshold, keyPoints);
 	
 	// 7. show keypoints on source image
+	cout << "Show Key Point in Image...\n";
 	ImageHelper::showPointsInImage(image, keyPoints, output);
 }
 

@@ -63,6 +63,56 @@ void DetectorHelper::thresholding(const Mat& source, double threshold, vector<mK
     }
 }
 
+void DetectorHelper::getInterestPoint(const vector<Mat>& layers, vector<mKeyPoint>& keyPoints)
+{
+    // is maxima in 3x3x3
+    int nLayers = layers.size();
+    int row = layers[0].rows;
+    int col = layers[0].cols;
+
+    for (int l = 1; l < nLayers - 1; l++) {
+        for (int r = 1; r < row - 1; r++) {
+            for (int c = 1; c < col - 1; c++) {
+                if (DetectorHelper::checkMaxima333(layers, l, r, c)) {
+                    keyPoints.push_back(mKeyPoint(r, c));
+                }
+            }
+        }
+    }
+}
+
+bool DetectorHelper::checkMaxima333(const vector<Mat>& layers, int l, int r, int c)
+{
+    // source size
+    int nLayers = layers.size();
+    int row = layers[0].rows;
+    int col = layers[0].cols;
+
+    double value = layers[l].at<double>(r, c);
+
+    // check neighbours
+    for (int dl = -1; dl <= 1; dl++) {
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                if (dx == 0 && dy == 0 && dl == 0) continue;
+
+                int nc = c + dx;
+                int nr = r + dy;
+                int nl = l + dl;
+
+                if (checkInBound(nr, nc, row, col)) {
+                    double nValue = layers[nl].at<double>(nr, nc);
+                    if (nValue > value) {
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
 bool DetectorHelper::checkMaxima(int i, int j, const Mat& source)
 {
     // source size
