@@ -63,8 +63,8 @@ Mat KernelHelper::generateLOGKernel(double sigma)
         for (int x = -halfKernelSize; x <= halfKernelSize; x++) {
             double y_filter = exp(-(y * y) / (2.0 * sigma * sigma));
             double x_filter = exp(-(x * x) / (2.0 * sigma * sigma));
-            double value = (-(2 * sigma * sigma) + (x * x + y * y)) * (x_filter * y_filter) * (1.0 / (2 * M_PI * sigma * sigma * sigma * sigma));
-            // double value = (-(2 * sigma * sigma) + (x * x + y * y)) * (x_filter * y_filter) * (1.0 / (2 * M_PI * sigma * sigma));
+            // double value = (-(2 * sigma * sigma) + (x * x + y * y)) * (x_filter * y_filter) * (1.0 / (2 * M_PI * sigma * sigma * sigma * sigma));
+            double value = -1.0 / (M_PI * sigma * sigma) * (x_filter * y_filter) * (1 - (x * x + y * y)/(2 * sigma * sigma));
             logKernel.at<double>(y + halfKernelSize, x + halfKernelSize) = value;
         }
     }
