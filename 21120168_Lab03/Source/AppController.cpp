@@ -29,9 +29,18 @@ void AppController::run(int argc, char** argv)
 		detector->detectAndShow(image);
 		delete detector;
 	}
-	// match by SIFT
-	else if (false) {
-		// exec matching images by SIFT
+	// match by SIFT and KNN: <image1> <image2> <detector>
+	// detector: 1 (Harris), 2 (Blob), 3 (DoG)
+	else if (argc == 4 && checkDetector(argv[3])) {
+		// exec matching images
+		Mat image1 = ImageHelper::readImage(argv[1]);
+		Mat image2 = ImageHelper::readImage(argv[2]);
+		int detector = atoi(argv[3]);
+
+		ImagesMatcher* matcher = new ImagesMatcher();
+		double result = matcher->matchBySIFT(image1, image2, detector);
+		cout << "Matching score: " << result << "\n";
+		delete matcher;
 	}
 	// show Help
 	else {
@@ -44,13 +53,20 @@ void AppController::run(int argc, char** argv)
 void AppController::showHelp()
 {
 	cout << "---------------- LAB 03 ----------------\n";
-	cout << "Detect by Harris: 21120168_Lab03 <img_path> harris\n";
-	cout << "Detect by Blob:   21120168_Lab03 <img_path> blob\n";
-	cout << "Detect by DoG:    21120168_Lab03 <img_path> dog\n";
-	cout << "Match 2 images:   21120168_Lab03 <img_path1>  <img_path2> <detector>\n";
+	cout << "Detect by Harris: 21120168_Lab03.exe <img_path> harris\n";
+	cout << "Detect by Blob:   21120168_Lab03.exe <img_path> blob\n";
+	cout << "Detect by DoG:    21120168_Lab03.exe <img_path> dog\n";
+	cout << "Match 2 images:   21120168_Lab03.exe <img_path1>  <img_path2> <detector>\n";
 	cout << "Detector:";
 	cout << "\t 1: Harris\n";
 	cout << "\t 2: Blob\n";
 	cout << "\t 3: DoG\n";
 	cout << "-----------------------------------------\n";
+}
+
+bool AppController::checkDetector(char* detector)
+{
+	return (strcmp(detector, "1") == 0 || 
+		strcmp(detector, "2") == 0 || 
+		strcmp(detector, "3") == 0);
 }

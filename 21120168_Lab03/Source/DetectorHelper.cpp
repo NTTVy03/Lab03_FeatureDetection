@@ -74,7 +74,7 @@ void DetectorHelper::getInterestPoint(const vector<Mat>& layers, vector<mKeyPoin
         for (int r = 1; r < row - 1; r++) {
             for (int c = 1; c < col - 1; c++) {
                 if (DetectorHelper::checkMaxima333(layers, l, r, c)) {
-                    keyPoints.push_back(mKeyPoint(r, c));
+                    keyPoints.push_back(mKeyPoint(r, c, layerToScale(l)));
                 }
             }
         }
@@ -102,7 +102,7 @@ bool DetectorHelper::checkMaxima333(const vector<Mat>& layers, int l, int r, int
 
                 if (checkInBound(nr, nc, row, col)) {
                     double nValue = layers[nl].at<double>(nr, nc);
-                    if (nValue > value) {
+                    if (abs(nValue) > abs(value)) {
                         return false;
                     }
                 }
@@ -132,7 +132,7 @@ bool DetectorHelper::checkMaxima(int i, int j, const Mat& source)
 
         if (checkInBound(ni, nj, row, col)) {
             double nValue = source.at<double>(ni, nj);
-            if (nValue > value) {
+            if (abs(nValue) > abs(value)) {
                 return false;
             }
         }
@@ -144,4 +144,10 @@ bool DetectorHelper::checkMaxima(int i, int j, const Mat& source)
 bool DetectorHelper::checkInBound(int i, int j, int row, int col)
 {
     return (i >= 0 && j >= 0 && i < row&& j < col);
+}
+
+double DetectorHelper::layerToScale(int layer)
+{
+    return DEFAULT_SIGMA + layer + 5;
+
 }

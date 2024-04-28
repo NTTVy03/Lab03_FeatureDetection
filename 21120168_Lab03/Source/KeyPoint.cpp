@@ -1,10 +1,10 @@
 #include "../Header/KeyPoint.h"
 
-mKeyPoint::mKeyPoint(int r, int c, double ra)
+mKeyPoint::mKeyPoint(int r, int c, double s)
 {
 	_row = r;
 	_col = c;
-	_radius = ra;
+	_scale = s;
 }
 
 int mKeyPoint::row()
@@ -17,14 +17,19 @@ int mKeyPoint::col()
 	return _col;
 }
 
-int mKeyPoint::radius()
+double mKeyPoint::scale()
 {
-	return _radius;
+	return _scale;
 }
 
-void mKeyPoint::set(int r, int c, double ra)
+int mKeyPoint::radius()
+{
+	return (1.0*_scale * sqrt(2));
+}
+
+void mKeyPoint::set(int r, int c, double s)
 {
 	_row = r;
 	_col = c;
-	if (ra != 0)_radius = ra;
+	if (s != 0) _scale = s;
 }

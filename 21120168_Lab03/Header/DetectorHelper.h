@@ -2,6 +2,7 @@
 
 #include "opencv2/core.hpp"
 #include "KeyPoint.h"
+#include "Constant.h"
 
 #include <vector>
 #include <iostream>
@@ -24,5 +25,6 @@ private:
 	static bool checkMaxima(int i, int j, const Mat& source);
 	static bool checkMaxima333(const vector<Mat>& layers, int l, int r, int c);
 	static bool checkInBound(int i, int j, int row, int col);
+	static double layerToScale(int layer);
 };
 

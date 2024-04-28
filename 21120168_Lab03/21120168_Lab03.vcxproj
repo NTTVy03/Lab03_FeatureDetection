@@ -146,8 +146,10 @@
     <ClCompile Include="Source\DoGDetector.cpp" />
     <ClCompile Include="Source\HarrisDetector.cpp" />
     <ClCompile Include="Source\ImageHelper.cpp" />
+    <ClCompile Include="Source\ImagesMatcher.cpp" />
     <ClCompile Include="Source\KernelHelper.cpp" />
     <ClCompile Include="Source\KeyPoint.cpp" />
+    <ClCompile Include="Source\SIFT.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header\AppController.h" />
@@ -157,8 +159,10 @@
     <ClInclude Include="Header\DoGDetector.h" />
     <ClInclude Include="Header\HarrisDetector.h" />
     <ClInclude Include="Header\ImageHelper.h" />
+    <ClInclude Include="Header\ImagesMatcher.h" />
     <ClInclude Include="Header\KernelHelper.h" />
     <ClInclude Include="Header\KeyPoint.h" />
+    <ClInclude Include="Header\SIFT.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

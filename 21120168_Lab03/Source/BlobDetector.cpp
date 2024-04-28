@@ -10,12 +10,13 @@ void BlobDetector::detect(Mat image, vector<mKeyPoint>& keyPoints, Mat& output)
 
 	// 2. Create n layer A[]
 	cout << "Generate layers...\n";
-	double sigma = DEFAULT_SIGMA;
+	double sigma = DEFAULT_SIGMA + 5;
 	int numberLayers = 10;
 	vector<Mat> layers;
 
 	for (int i = 0; i < numberLayers; i++) {
 		// 2.1. calculate sigma[i] --> generate LOG kernel
+		// sigma[i] = DEFAULT_SIGMA + i
 		Mat LOGKernel = KernelHelper::generateLOGKernel(sigma);
 		sigma = sigma + 1;
 
