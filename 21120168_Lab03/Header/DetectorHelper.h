@@ -20,11 +20,11 @@ public:
 	static Mat NMS(const Mat& source);
 	static void thresholding(const Mat& source, double threshold, vector<mKeyPoint>& keyPoints);
 	static void getInterestPoint(const vector<Mat>& layers, vector<mKeyPoint>& keyPoints);
+	static double layerToScale(int layer);
 
 private:
 	static bool checkMaxima(int i, int j, const Mat& source);
-	static bool checkMaxima333(const vector<Mat>& layers, int l, int r, int c);
+	static bool checkMaxima333(const vector<Mat>& layers, int l, int r, int c, double threshold);
 	static bool checkInBound(int i, int j, int row, int col);
-	static double layerToScale(int layer);
 };
 

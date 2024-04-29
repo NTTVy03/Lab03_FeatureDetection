@@ -10,7 +10,7 @@ void DoGDetector::detect(Mat image, vector<mKeyPoint>& keyPoints, Mat& output)
 
 	// 2. Create n layer DoG[]
 	cout << "Generate layers...\n";
-	double sigma = DEFAULT_SIGMA;
+	double sigma = DetectorHelper::layerToScale(0);
 	int numberLayers = 10;
 	vector<Mat> layers;
 
@@ -21,7 +21,7 @@ void DoGDetector::detect(Mat image, vector<mKeyPoint>& keyPoints, Mat& output)
 
 	for (int i = 0; i < numberLayers; i++) {
 		// 2.1. calculate sigma[i] --> generate Gaussian kernel
-		sigma = sigma + 1;
+		sigma = DetectorHelper::layerToScale(i + 1);
 		curGaussianKernel = KernelHelper::generateGaussianKernel(sigma);
 		curGaussianImage = KernelHelper::applyKernel(blurImage, curGaussianKernel);
 

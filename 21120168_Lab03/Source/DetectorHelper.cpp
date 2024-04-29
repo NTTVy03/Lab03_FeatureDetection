@@ -11,7 +11,7 @@ double DetectorHelper::getMaxInMat(const Mat& source)
     for (int i = 0; i < row; i++) {
         for (int j = 0; j < col; j++) {
             // double instead of CV_64F
-            double value = source.at<double>(i,j);
+            double value = abs(source.at<double>(i,j));
 
             if (value > maxValue) {
                 maxValue = value;
@@ -70,10 +70,17 @@ void DetectorHelper::getInterestPoint(const vector<Mat>& layers, vector<mKeyPoin
     int row = layers[0].rows;
     int col = layers[0].cols;
 
+    vector<double> thresholds;
+
+    for (int l = 1; l < nLayers - 1; l++) {
+        double threshold = 0.8 * DetectorHelper::getMaxInMat(layers[l]);
+        thresholds.push_back(threshold);
+    }
+    
     for (int l = 1; l < nLayers - 1; l++) {
         for (int r = 1; r < row - 1; r++) {
             for (int c = 1; c < col - 1; c++) {
-                if (DetectorHelper::checkMaxima333(layers, l, r, c)) {
+                if (DetectorHelper::checkMaxima333(layers, l, r, c, thresholds[l])) {
                     keyPoints.push_back(mKeyPoint(r, c, layerToScale(l)));
                 }
             }
@@ -81,14 +88,14 @@ void DetectorHelper::getInterestPoint(const vector<Mat>& layers, vector<mKeyPoin
     }
 }
 
-bool DetectorHelper::checkMaxima333(const vector<Mat>& layers, int l, int r, int c)
+bool DetectorHelper::checkMaxima333(const vector<Mat>& layers, int l, int r, int c, double threshold)
 {
     // source size
     int nLayers = layers.size();
     int row = layers[0].rows;
     int col = layers[0].cols;
 
-    double value = layers[l].at<double>(r, c);
+    double value = abs(layers[l].at<double>(r, c));
 
     // check neighbours
     for (int dl = -1; dl <= 1; dl++) {
@@ -102,7 +109,7 @@ bool DetectorHelper::checkMaxima333(const vector<Mat>& layers, int l, int r, int
 
                 if (checkInBound(nr, nc, row, col)) {
                     double nValue = layers[nl].at<double>(nr, nc);
-                    if (abs(nValue) > abs(value)) {
+                    if (abs(nValue) > value) {
                         return false;
                     }
                 }
@@ -110,7 +117,7 @@ bool DetectorHelper::checkMaxima333(const vector<Mat>& layers, int l, int r, int
         }
     }
 
-    return true;
+    return value > threshold;
 }
 
 bool DetectorHelper::checkMaxima(int i, int j, const Mat& source)
@@ -148,6 +155,7 @@ bool DetectorHelper::checkInBound(int i, int j, int row, int col)
 
 double DetectorHelper::layerToScale(int layer)
 {
-    return DEFAULT_SIGMA + layer + 5;
+    //return pow(sqrt(2), (layer + 1));
+    return sqrt(2) * (layer + 1);
 
 }
