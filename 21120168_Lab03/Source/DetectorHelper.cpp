@@ -109,7 +109,7 @@ bool DetectorHelper::checkMaxima333(const vector<Mat>& layers, int l, int r, int
 
                 if (checkInBound(nr, nc, row, col)) {
                     double nValue = layers[nl].at<double>(nr, nc);
-                    if (abs(nValue) > value) {
+                    if (abs(nValue) >= value) {
                         return false;
                     }
                 }
@@ -139,7 +139,7 @@ bool DetectorHelper::checkMaxima(int i, int j, const Mat& source)
 
         if (checkInBound(ni, nj, row, col)) {
             double nValue = source.at<double>(ni, nj);
-            if (abs(nValue) > abs(value)) {
+            if (abs(nValue) >= abs(value)) {
                 return false;
             }
         }

@@ -35,7 +35,7 @@ void HarrisDetector::detect(Mat image, vector<mKeyPoint>& keyPoints, Mat& output
 	Mat NMSMat = DetectorHelper::NMS(R);
 
 	// 6. threshold: threshold * maxR
-	cout << "Threshold = 0.8...\n";
+	cout << "Threshold = 0.2...\n";
 	float threshold = DEFAULT_THRESHOLD * maxR;
 	DetectorHelper::thresholding(NMSMat, threshold, keyPoints);
 	
